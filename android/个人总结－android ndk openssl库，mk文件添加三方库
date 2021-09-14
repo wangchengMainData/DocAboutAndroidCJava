@@ -1,0 +1,62 @@
+Android下openssl编译和使用：https://blog.csdn.net/zoujin6649/article/details/89891720?spm=1001.2014.3001.5501
+需要下载ndk,配置完mk文件后，需要source /etc/profile，根据需要的内核编译openssl库即可得到对应的so　a文件
+头文件添加方式jni/lib/include整个文件夹拖入项目。mk中
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+
+.a文件，local_src_files  prebuilt_static_library 静态库　　最终模块local_static_libraries
+include $(CLEAR_VARS)
+LOCAL_MODULE := XX
+LOCAL_SRC_FILE := XX.a
+incldue $(PREBUILT_STATIC_LIBRARY)
+
+.so文件，local_src_files　prebuilt_shared_libaray　动态库    最终模块local_shared_libraries
+include $(CLEAR_VARS)
+LOCAL_MODULE := XX
+LOCAL_SRC_FILE := XX.so
+incldue $(PREBUILT_SHARED_LIBRARY)
+
+.so文件
+下载ndk,配置/etc/profile，使用source /etc/profule使环境变量生效
+
+export NDK_HOME="/home/server1/wangcheng/Ndk/android-ndk-r21"
+PATH=$NDK_HOME:$PATH
+
+编译openssl库 ./wc.sh x86 (x86_64,arm,arm64...  通过./Configure可以查看)
+
+#!/bin/bash
+NAME = $1
+echo "shym@618"|sudo -S rm -rf openssl-1.1.1f
+tar -zxvf openssl-1.1.1f.tar.gz
+cd openssl-1.1.1f
+mkdir ./output-$NAME
+export ANDROID_NDK_HOME=/home/server1/wangcheng/Ndk/android-ndk-r21
+export PATH=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-86_64/bin:$ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
+./Configure android-$NAME -D__ANDROID_API__=23 --prefix=/home/server1/wangcheng/WorkPlace/PersonalGit/openssl-1.1.1f/output-$NAME
+make
+echo "shym@618"|sudo -S make install ／／shell中使用sudo权限
+mv output-$NAME ..
+cd ..
+
+build.gradle(app)中添加
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+生成对应版本的库后，在项目中mk文件添加.so,配置app_abi:=(想编译的内核版本)
+然后ndk-build,java文件中system.loadlibrary时优先加载crypto动态库。
+
+    externalNativeBuild{
+        ndkBuild{
+            path 'jni/Android.mk'
+        }
+    }
+jni代码提示，需要加入上段(app.build.gradle)
+
+出现More than one file was found with OS independent path 'lib/arm64-v8a/libcrypto.so'　，是因为系统包多次到入，在build.gradle中增加如下以选定so库
+    packagingOptions {
+        pickFirst 'lib/arm64-v8a/libcrypto.so'
+        pickFirst 'lib/arm64-v8a/libssl.so'
+        pickFirst 'lib/arm64-v8a/libjni-demo.so'
+    }

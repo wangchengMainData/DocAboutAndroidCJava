@@ -1,0 +1,20 @@
+
+frameworks/base/core/java/Android/Bluetooth: 
+frameworks/base/services/java/com/android/server/BluetoothManagerService.java: 
+里面提供java层使用的一些类和一些aidl文件，供其他进程调用。打开和关闭蓝牙的公共接口也在这里面。 
+packages/apps/Bluetooth：对应Bluetooth.apk，作为系统的蓝牙的核心进程而存在，com.android.bluetooth，调用framework的打开蓝牙接口后会启动该进程。其内部实现了多种上层蓝牙模式：opp，hfp，a2dp，hdp，hid等，并通过JNI调用与hal层完成联系。 
+/hardware/libhardware/include/hardware/bluetooth.h: hal层接口头文件 
+external/bluetooth/bluedroid：bluedroid官方协议栈 
+packages/apps/Settings/src/com/android/settings/Bluetooth: setting中蓝牙部分，界面相关 
+bluedroid蓝牙的调用方式：从apk到framework，framework再通过binder调用bluetooth应用，在通过应用层利用jni调用hal层实现蓝牙的各种请求。
+
+OPP：文件传输规范 
+hfp：和电话相关，接听、挂断电话，以及连接sco通路 
+a2dp：蓝牙立体声规范，其中包含avrcp规范，avrcp规范实现了听歌时暂停、上下歌曲选择等控制模式。目前蓝牙耳机一般都支持这两种规范。 
+hid：人机交互规范，蓝牙鼠标键盘等 
+phap：电话号码簿访问协议 
+hdp：蓝牙医疗相关规范
+
+
+蓝牙打开流程：
+BluetoothAdapter中的getDefaultAdapter() ,在该方法中获得BluetoothManagerService.java中的binder对象并使用这个对象创建BluetoothAdapter实例

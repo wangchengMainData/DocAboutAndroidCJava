@@ -1,0 +1,19 @@
+多进程通信底层　binder　IPC机制
+其他ipc方式：管道，SystemV,Socket
+
+binder相对于其他的性能优势：更加高效，binder数据拷贝只需要一次，二管道，消息队列，Socket都需要两次，共享内存的方式一次都不需要，但实现方式比较复杂
+binder相对于其他的安全优势：传统的方式没有严格验证，比如socket通讯ip地址时客户端手动填入很容易伪造。Binder机制从协议本身就支持对通信双方做身份校验。
+
+binder采用C/S架构
+组件角度：client,serviceManager,Server,binder驱动
+
+server 房东　client　租客　serviceManager　房屋中介
+每个server需要在serviceManager中注册，serviceManger在一张表中记录服务的名字，对应了server的引用，client需要通过名字到ServiceManger去找server的引用，通过binder和server通信
+
+binder的一次拷贝：Linux内核实际上没有从一个用户空间到另一个用户空间直接拷贝的函数，需要先用copy_from_user()拷贝到内核空间，再用copy_to_user()拷贝到另一个用户空间。为了实现用户空间到用户空间的拷贝，mmap()分配的内存除了映射进了接收方进程里，还映射进了内核空间。所以调用copy_from_user()将数据拷贝进内核空间也相当于拷贝进了接收方的用户空间，这就是Binder只需一次拷贝的‘秘密’。
+
+
+
+
+binder　机制　图文讲解：https://www.cnblogs.com/xinmengwuheng/p/7070167.html
+
