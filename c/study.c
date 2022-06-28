@@ -25,7 +25,20 @@
 
 typedef int Length;//类型定义，此时Length就是int 的别名 typedef 后第一个是原来的类型，第二个是新的别名  Length a,b,c
 typedef long int64_t;
-
+/**
+typedef struct type1{
+    ...
+    ...
+}mytype1;
+和
+struct type2{
+    ...
+    ...
+}mytype2;
+简单的说：
+前者是建立了一个type1类型的结构以及它的一个别名mytype1(mytype1还是个类型，和int是一样的)
+后者是建立了一个type2类型的结构以及它的一个对象mytype2（mytype2相当于int m 后面那个变量m）
+**/
 typedef union {//其中的成员占据同一份内存控件
     //同一时间只有一个成员是有效的，union的大小是其最大的成员　，初始化：对第一个成员做初始化
     int i;

@@ -1,7 +1,7 @@
 
-java  -Djava.library.path='/home/server1/wangcheng/code/H6/prebuilts/sdk/tools/linux/lib64' -jar '/home/server1/wangcheng/code/H6/prebuilts/sdk/tools/lib/signapk.jar'  '/home/server1/wangcheng/code/H6/build/target/product/security/default/platform.x509.pem' '/home/server1/wangcheng/code/H6/build/target/product/security/default/platform.pk8'  '/home/server1/wangcheng/RST_GXX_3.0.3.65.apk'    '/home/server1/wangcheng/RST_GXX_3.0.3.65_signed.apk'
+java  -Djava.library.path='/home1/wangcheng/V02_new/oem/sxr2130_apps/LINUX/android/prebuilts/sdk/tools/linux/lib64' -jar '/home1/wangcheng/V02_new/oem/sxr2130_apps/LINUX/android/prebuilts/sdk/tools/linux/lib/apksigner.jar'  '/home1/wangcheng/V02_new/oem/sxr2130_apps/LINUX/android/build/target/product/security/platform.x509.pem' '/home1/wangcheng/V02_new/oem/sxr2130_apps/LINUX/android/build/target/product/security/platform.pk8'  '/home1/wangcheng/1.apk'    '/home1/wangcheng/1_signed.apk'
 
-mv '/home/server1/wangcheng/RST_GXX_3.0.3.65.apk' '/home/server1/wangcheng/RST_GXX_3.0.3.65_unsigned.apk'
-mv '/home/server1/wangcheng/RST_GXX_3.0.3.65_signed.apk' '/home/server1/wangcheng/RST_GXX_3.0.3.65.apk'
+mv '/home1/wangcheng/1.apk' '/home1/wangcheng/1_unsign.apk'
+mv '/home1/wangcheng/1_signed.apk' '/home1/wangcheng/1.apk'
 
 
